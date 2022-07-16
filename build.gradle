@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.1'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'   //jacoco plugin
 }
 
 group = 'com.bns.gh'
@@ -35,4 +36,34 @@ jar{
 
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport  
+}
+
+jacocoTestReport{                 //configuration for report formats.
+	dependsOn test
+	
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                "com/bns/gh/models/**",
+                "com/bns/gh/SpringGhActionsApplication**"
+            ])
+        }))
+    }	
+	reports {
+		xml.enabled false
+		csv.enabled false
+		html.enabled true
+	}
+	finalizedBy jacocoTestCoverageVerification  //run right after jacocoTestReport
+}
+jacocoTestCoverageVerification {   //Verifies the code coverage rule if enabled.
+	violationRules {
+		rule {
+			enabled = true
+			limit {
+				minimum = 0.55
+			}
+		}
+	}
 }
