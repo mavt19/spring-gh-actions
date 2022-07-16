@@ -5,6 +5,7 @@ plugins {
 	id 'jacoco'   //jacoco plugin
 }
 
+
 group = 'com.bns.gh'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17' 
@@ -37,6 +38,10 @@ jar{
 tasks.named('test') {
 	useJUnitPlatform()
 	finalizedBy jacocoTestReport  
+}
+
+jacoco {
+    toolVersion = "0.8.8"
 }
 
 jacocoTestReport{                 //configuration for report formats.
