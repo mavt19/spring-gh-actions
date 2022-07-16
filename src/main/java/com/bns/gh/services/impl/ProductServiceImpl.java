@@ -29,12 +29,13 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public Page<ProductDto> findAll(Pageable pageable) {
-		// TODO Auto-generated method stub
+//		// TODO Auto-generated method stub
+//		Page<Course> courses = productRepository.findAll(pageable);
+//		return new PageImpl<>(courses.stream().map(AppUtils::entityToDto).toList());
 		return null;
 	}
 
 	@Override
-	@Cacheable(value = "productCache")
 	public Optional<ProductDto> findById(Long id) {
 		// TODO Auto-generated method stub
 		Optional<Product> productOptional = productRepository.findById(id);
@@ -45,7 +46,7 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public List<ProductDto> findProductInRange(double min, double max) {
 		// TODO Auto-generated method stub
-		return null;
+		return productRepository.findByPriceBetween(min, max).stream().map(AppUtils::productToProductDto).toList();
 	}
 
 	@Override
@@ -58,13 +59,19 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public ProductDto update(ProductDto product, Long id) {
 		// TODO Auto-generated method stub
-		return null;
+		return productRepository.findById(id)
+				.map(x-> {
+					Product p = new Product(x.getId(), product.getName(), product.getQty(), product.getPrice());
+					return productRepository.save(p);
+				})
+				.map(AppUtils::productToProductDto)
+				.orElse(null);
 	}
 
 	@Override
 	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
-		
+		productRepository.deleteById(id);
 	}
 
 }
