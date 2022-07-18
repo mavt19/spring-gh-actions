@@ -27,17 +27,17 @@ public class ProductController {
 	
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
-	public List<?> listar() {
+	public List<ProductDto> listar() {
 		return productService.findAll();
 	}
 
 
 	@GetMapping("/{productId}")
-	public ProductDto getById(@PathVariable(value = "productId") Long productId) {
-		ProductDto result = productService.findById(productId).orElse(null);
-		System.out.println("*".repeat(25) + result);
+	public ResponseEntity<?>  getById(@PathVariable(value = "productId") Long productId) {
+				return productService.findById(productId).
+				map(x-> ResponseEntity.ok(x))
+				.orElse(ResponseEntity.notFound().build());
 
-		return result;
 
 	}
 	
