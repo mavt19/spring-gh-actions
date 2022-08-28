@@ -6,29 +6,29 @@ pipeline {
     stages {
         stage("Compile") {
             steps {
-                sh "./gradlew compileJava"
+                bat "./gradlew compileJava"
             }
         }
         stage("Unit test") {
             steps {
-                sh "./gradlew test"
+                bat "./gradlew test"
             }
         }
         stage("Code coverage") {
             steps {
-        	    sh "./gradlew jacocoTestReport"
+        	    bat "./gradlew jacocoTestReport"
         	 	publishHTML (target: [
          	        reportDir: 'build/reports/jacoco/test/html',
          			reportFiles: 'index.html',
          			reportName: 'JacocoReport'
          	    ])
-         		sh "./gradlew jacocoTestCoverageVerification"
+         		bat "./gradlew jacocoTestCoverageVerification"
          	}
         }
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarQubePruebas') {
-                    sh './gradlew sonarqube'
+                    bat './gradlew sonarqube'
                 }
             }
         }
