@@ -28,7 +28,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarQubePruebas') {
-                    bat './gradlew sonarqube'
+                    bat './gradlew sonarqube -Dsonar.login=05b61c2d1cb657800474499bdf8f1b787c25413f'
                 }
             }
         }
